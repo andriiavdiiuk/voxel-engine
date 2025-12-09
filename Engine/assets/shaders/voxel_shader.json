@@ -1,0 +1,4 @@
+{
+    "fragment_shader_path": "./assets/shaders/voxel_shader.frag",
+    "vertex_shader_path": "./assets/shaders/voxel_shader.vert"
+}

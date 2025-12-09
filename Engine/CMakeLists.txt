@@ -66,6 +66,7 @@ add_library(GameEngine
     src/Core/Resources/AssetStorage.hpp
     src/Core/Resources/AssetLoaders.hpp
     src/Core/Resources/AssetLoaders.cpp
+    src/Core/Resources/DefaultAssets.hpp
 
     src/Core/Renderer/ChunkRenderer.hpp
     src/Core/Renderer/ChunkRenderer.cpp
@@ -96,6 +97,13 @@ if(MSVC)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /diagnostics:caret")
 endif()
 
+# ===== Copy Assets =====
+add_custom_command(TARGET GameEngine POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/assets"
+        "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets"
+)
+
 
 # ===== Includes =====
 target_include_directories(GameEngine PUBLIC
@@ -106,6 +114,7 @@ target_include_directories(GameEngine PUBLIC
 )
 
 find_package(OpenGL REQUIRED)
+
 
 target_link_libraries(GameEngine PUBLIC
     OpenGL::GL
