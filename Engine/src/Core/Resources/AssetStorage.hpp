@@ -18,13 +18,27 @@ namespace GameEngine
 
         using AssetLoaderType = std::function<std::shared_ptr<T>(const std::string&)>;
 
+        using AssetRegistriesList = std::initializer_list<std::reference_wrapper<const std::unordered_map<std::string, std::string>>>;
+
         AssetStorage(AssetLoaderType loader) : loader(std::move(loader)) {};
 
-        AssetStorage(const std::unordered_map<std::string, std::string>& registry, AssetLoaderType loader) : loader(std::move(loader)) 
+        AssetStorage(const std::unordered_map<std::string, std::string>& registry, AssetLoaderType loader) : loader(std::move(loader))
         {
             for (const auto& [name, path] : registry)
             {
                 registerAsset(name, path);
+            }
+        };
+
+        AssetStorage(AssetRegistriesList registries, AssetLoaderType loader) : loader(std::move(loader))
+        {
+            for (const auto& registryRef : registries)
+            {
+                const auto& registry = registryRef.get();
+                for (const auto& [name, path] : registry)
+                {
+                    registerAsset(name, path);
+                }
             }
         };
 
@@ -118,6 +132,5 @@ namespace GameEngine
         std::unordered_map<AssetHandle, std::shared_ptr<T>> loadedAssets;
         std::unordered_map<AssetHandle, AssetMetadata> assets;
     };
-
 
 }
