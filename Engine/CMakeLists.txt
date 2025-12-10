@@ -42,6 +42,8 @@ add_library(GameEngine
     src/Core/World/VoxelStorage.cpp
     src/Core/World/VoxelStorage.hpp
     src/Core/World/World.hpp
+    src/Core/World/WorldGenerator.cpp
+    src/Core/World/WorldGenerator.hpp
 
     src/Core/Components/Transform.hpp
 
@@ -61,6 +63,8 @@ add_library(GameEngine
     src/Common/Bimap.hpp
     src/Common/BitArray.hpp
     src/Common/BitArray.cpp
+    src/Common/Noises/PerlinNoise.hpp
+    src/Common/Noises/PerlinNoise.cpp
 
     src/Core/Resources/AssetHandle.hpp
     src/Core/Resources/AssetStorage.hpp
