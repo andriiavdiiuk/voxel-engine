@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+
 namespace GameEngine
 {
 				class Texture2D;

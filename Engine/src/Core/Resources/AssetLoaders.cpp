@@ -9,7 +9,7 @@
 #include <glaze/glaze.hpp>
 #include "Utils/FileUtils.hpp"
 #include "VoxelResource.hpp"
-
+#include "AssetHandle.hpp"
 
 template <>
 struct glz::meta<GameEngine::VoxelFace> {
@@ -23,20 +23,57 @@ struct glz::meta<GameEngine::VoxelFace> {
     );
 };
 
+
+template <>
+struct glz::meta<GameEngine::VoxelResource>
+{
+    using T = GameEngine::VoxelResource;
+
+    static constexpr auto read_textures = [](T& voxel, std::string const& input, glz::context& ctx) {
+        voxel.textureArray = GameEngine::AssetHandle::fromString(input);
+    };
+
+    static constexpr auto value = glz::object(
+        "textureArray", glz::custom<read_textures, &T::textureArray>,
+        "textures", &T::textures
+    );
+};
+
+
+template <typename T>
+void loadJson(T& out, const std::string& path, const std::string& descName)
+{
+    auto ec = glz::read_file_json(out, path, std::string{});
+    if (ec)
+    {
+        std::string desc = glz::format_error(ec, std::string{});
+        std::string msg = std::format("Failed to load {} '{}': {}", descName, path, desc);
+        LOG_ERROR(msg);
+        throw std::runtime_error(msg);
+    }
+}
+
+
 namespace GameEngine
 {
+
+    ImageData loadImageData(const std::string& path, int& width, int& height, int& nrChannels, int desired_channels)
+    {
+        ImageData data(stbi_load(path.c_str(), &width, &height, &nrChannels, desired_channels), stbi_image_free);
+        if (!data)
+        {
+            std::string msg = std::format("Failed to load texture '{}': {}", path, stbi_failure_reason());
+            LOG_ERROR(msg);
+            throw std::runtime_error(msg);
+        }
+        return data;
+    }
+
 
     std::unique_ptr<std::unordered_map<std::string, std::string>> loadRegistry(const std::string& path)
     {
         std::unordered_map<std::string, std::string> data{};
-        auto ec = glz::read_file_json(data, path, std::string{});
-        if (ec)
-        {
-            std::string desc = glz::format_error(ec, std::string{});
-            std::string msg = std::format("Failed to load registry '{}': {}", path, desc);
-            LOG_ERROR(msg);
-            throw std::runtime_error(msg);
-        }
+        loadJson<std::unordered_map<std::string, std::string>>(data, path, "registry");
         return std::make_unique<std::unordered_map<std::string, std::string>>(data);
     }
 
@@ -44,15 +81,7 @@ namespace GameEngine
     std::shared_ptr<Texture2D> loadTexture2D(const std::string& path)
     {
         int width, height, nrChannels;
-
-        ImageData data(stbi_load(path.c_str(), &width, &height, &nrChannels, 0), stbi_image_free);
-        if (!data)
-        {
-            std::string desc = std::string(stbi_failure_reason());
-            std::string msg = std::format("Failed to load texture '{}': {}", path, desc);
-            LOG_ERROR(msg);
-            throw std::runtime_error(msg);
-        }
+        auto data = loadImageData(path, width, height, nrChannels, 0);
         return std::make_shared<Texture2D>(width, height, std::move(data));
     }
 
@@ -65,16 +94,10 @@ namespace GameEngine
     std::shared_ptr<Shader> loadShader(const std::string& path)
     {
         ShaderJson data{};
-        auto ec = glz::read_file_json(data, path, std::string{});
-        if (ec)
-        {
-            std::string desc = glz::format_error(ec, std::string{});
-            std::string msg = std::format("Failed to load shader '{}': {}", path, desc);
-            LOG_ERROR(msg);
-            throw std::runtime_error(msg);
-        }
+        loadJson<ShaderJson>(data, path, "shader");
         return std::make_shared<Shader>(readFile(data.vertex_shader_path), readFile(data.fragment_shader_path));
     }
+
 
     struct TextureArrayJson
     {
@@ -84,15 +107,8 @@ namespace GameEngine
 
     std::shared_ptr<TextureArray> loadTextureArray(const std::string& path)
     {
-        std::vector<TextureArrayJson> data{};
-        auto ec = glz::read_file_json(data, path, std::string{});
-        if (ec)
-        {
-            std::string desc = glz::format_error(ec, std::string{});
-            std::string msg = std::format("Failed to load texture array '{}': {}", path, desc);
-            LOG_ERROR(msg);
-            throw std::runtime_error(msg);
-        }
+        std::vector<TextureArrayJson> data;
+        loadJson<std::vector<TextureArrayJson>>(data, path, "texture array");
 
         std::unordered_map<std::string, ImageData> textures;
 
@@ -100,14 +116,7 @@ namespace GameEngine
         int width = 0, height = 0, nrChannels = 0;
         for (const auto& texture : data)
         {
-            ImageData image(stbi_load(texture.path.c_str(), &width, &height, &nrChannels, 4), stbi_image_free);
-            if (!image)
-            {
-                std::string desc = std::string(stbi_failure_reason());
-                std::string msg = std::format("Failed to load texture '{}': {}", path, desc);
-                LOG_ERROR(msg);
-                throw std::runtime_error(msg);
-            }
+            ImageData image = loadImageData(texture.path, width, height, nrChannels, 4);
             textures.emplace(texture.name, std::move(image));
 
             if (width > maxWidth) { maxWidth = width; };
@@ -124,20 +133,8 @@ namespace GameEngine
 
     std::shared_ptr<VoxelResource> loadVoxel(const std::string& path)
     {
-        VoxelResourceJson data{};
-        auto ec = glz::read_file_json(data, path, std::string{});
-        if (ec)
-        {
-            std::string desc = glz::format_error(ec, std::string{});
-            std::string msg = std::format("Failed to load voxel '{}': {}", path, desc);
-            LOG_ERROR(msg);
-            throw std::runtime_error(msg);
-            
-        }
-        VoxelResource resource = VoxelResource();
-        resource.textureArray = AssetHandle::fromString(data.textureArray);
-        resource.textures = data.textures;
-        return std::make_shared<VoxelResource>(resource);
+        VoxelResource data{};
+        loadJson<VoxelResource>(data, path, "voxel");
+        return std::make_shared<VoxelResource>(data);
     }
-  
 }
