@@ -79,6 +79,11 @@ add_library(GameEngine
     src/Core/Graphics/Meshing/ChunkMesh.hpp
     src/Core/Graphics/Meshing/ChunkMesh.cpp 
     
+    src/Core/UI/ImGui/ImGuiBase.cpp
+    src/Core/UI/ImGui/ImGuiBase.hpp
+    src/Core/UI/ImGui/ImGuiDebugLayer.hpp
+    src/Core/UI/ImGui/ImguiDebugLayer.cpp
+    
     src/Utils/FileUtils.hpp
     src/Utils/FileUtils.cpp)   
   
@@ -134,5 +139,6 @@ target_link_libraries(GameEngine PUBLIC
     stb_image
     spdlog::spdlog
     glaze::glaze
+    imgui
 )
 
