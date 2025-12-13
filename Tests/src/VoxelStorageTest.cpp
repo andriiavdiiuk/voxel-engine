@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <Core/World/VoxelStorage.hpp>
-#include <Core/Graphics/Voxels/Voxel.hpp>
+#include <Core/World/Voxel.hpp>
 
 constexpr int chunkBlocks = 16 * 16 * 16;
 
