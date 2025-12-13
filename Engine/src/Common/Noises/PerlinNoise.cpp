@@ -22,16 +22,19 @@ static float interpolate2D(double a0, double a1, double w)
     //return (a1 - a0) * ((w * (w * 6.0 - 15.0) + 10.0) * w * w * w) + a0;
 }
 
-static Coords randomGradient2D(int ix, int iy)
+static Coords randomGradient2D(size_t ix, size_t iy, size_t seed)
 {
-    constexpr int w = 8 * sizeof(int);
-    constexpr int s = w / 2; // rotation width
-    unsigned a = static_cast<unsigned>(ix);
-    unsigned b = static_cast<unsigned>(iy);
-    a *= 3284157443; b ^= a << s | a >> w - s;
-    b *= 1911520717; a ^= b << s | b >> w - s;
-    a *= 2048419325;
-    double random = static_cast<double>(a) * (3.14159265 / static_cast<double>(~(~0u >> 1))); // in [0, 2*Pi]
+    constexpr size_t w = 8 * sizeof(size_t);
+    constexpr size_t s = w / 2; // rotation width
+
+    size_t a = ix ^ (seed * 0xBF1BAFF8323E6C01ULL);
+    size_t b = iy ^ (seed * 0xB5A291C5D6EF7741ULL);
+    a *= 0xB61118FB40A1DE23ULL;
+    b ^= a << s | a >> w - s;
+    b *= 0xA8790BA45624BCADULL;
+    a ^= b << s | b >> w - s;
+    a *= 0xBB97E7B4DF0DF29BULL;
+    double random = static_cast<double>(a) / static_cast<double>(0xFFFFFFFFFFFFFFFF) * 2.0 * 3.14159265; // in [0, 2*Pi]
     Coords v{ 
         .x = std::cos(random), 
         .y = std::sin(random) 
@@ -39,9 +42,9 @@ static Coords randomGradient2D(int ix, int iy)
     return v;
 }
 
-static double dotGridGradient2D(int ix, int iy, double x, double y)
+static double dotGridGradient2D(size_t ix, size_t iy, double x, double y, size_t seed)
 {
-    Coords grad = randomGradient2D(ix, iy);
+    Coords grad = randomGradient2D(ix, iy, seed);
 
     // Compute the distance vector
     double dx = x - ix;
@@ -54,7 +57,7 @@ static double dotGridGradient2D(int ix, int iy, double x, double y)
 
 namespace GameEngine
 {
-    double perlinNoise2D(double x, double y)
+    double perlinNoise2D(double x, double y, size_t seed)
     {
         int x0 = static_cast<int>(x);
         int y0 = static_cast<int>(y);
@@ -66,13 +69,13 @@ namespace GameEngine
         double sy = y - y0;
 
         // Compute and interpolate top two corners
-        double n0 = dotGridGradient2D(x0, y0, x, y);
-        double n1 = dotGridGradient2D(x1, y0, x, y);
+        double n0 = dotGridGradient2D(x0, y0, x, y, seed);
+        double n1 = dotGridGradient2D(x1, y0, x, y, seed);
         double ix0 = interpolate2D(n0, n1, sx);
 
         // Compute and interpolate bottom two corners
-        n0 = dotGridGradient2D(x0, y1, x, y);
-        n1 = dotGridGradient2D(x1, y1, x, y);
+        n0 = dotGridGradient2D(x0, y1, x, y, seed);
+        n1 = dotGridGradient2D(x1, y1, x, y, seed);
         double ix1 = interpolate2D(n0, n1, sx);
 
         // Final step: interpolate between the two previously interpolated values, now in y
@@ -81,14 +84,14 @@ namespace GameEngine
         return value;
     }
 
-    double perlinNoiseOctave2D(double x, double y, int octaves, int gridSize, double contrast)
+    double perlinNoiseOctave2D(double x, double y, size_t seed, int octaves, int gridSize, double contrast)
     {
         double frequency = 1;
         double amplitude = 1;
         double value = 0;
         for (int i = 0; i < octaves; i++)
         {
-            value += perlinNoise2D(x * frequency / gridSize, y * frequency / gridSize) * amplitude;
+            value += perlinNoise2D(x * frequency / gridSize, y * frequency / gridSize, seed) * amplitude;
 
             amplitude /= 2;
             frequency *= 2;
@@ -107,7 +110,7 @@ namespace GameEngine
         return value;
     }
 
-    std::vector<std::vector<double>> perlinNoise2D(int width, int height, int startX, int startY, int octaves, int gridSize, double contrast)
+    std::vector<std::vector<double>> perlinNoise2D(int width, int height, int startX, int startY, int octaves, int gridSize, double contrast, size_t seed)
     {
         std::vector<std::vector<double>> noise(height, std::vector<double>(width, 0.0));
 
@@ -118,7 +121,7 @@ namespace GameEngine
                 double x = startX + i;
                 double y = startY + j;
 
-                double val = perlinNoiseOctave2D(x, y, octaves, gridSize, contrast);
+                double val = perlinNoiseOctave2D(x, y, seed, octaves, gridSize, contrast);
 
                 noise[i][j] = val; 
             }
