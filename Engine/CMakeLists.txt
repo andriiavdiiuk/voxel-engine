@@ -44,6 +44,7 @@ add_library(GameEngine
     src/Core/World/World.hpp
     src/Core/World/WorldGenerator.cpp
     src/Core/World/WorldGenerator.hpp
+    src/Core/World/WorldDefinitions.hpp
 
     src/Core/Components/Transform.hpp
 
@@ -102,10 +103,15 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /diagnostics:caret")
 endif()
 
 # ===== Copy Assets =====
-add_custom_command(TARGET GameEngine POST_BUILD
+set(GAMEENGINE_ASSETS_CURRENT_RELATIVE_PATH "assets")
+set(GAMEENGINE_ASSETS_OUPUT_RELATIVE_PATH "engine/assets")
+target_compile_definitions(GameEngine PUBLIC
+    GAMEENGINE_ASSETS_RELATIVE_PATH=\"${GAMEENGINE_ASSETS_CURRENT_RELATIVE_PATH}\"
+)
+add_custom_command(TARGET GameEngine PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_CURRENT_SOURCE_DIR}/assets"
-        "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets"
+        "${CMAKE_CURRENT_SOURCE_DIR}/${GAMEENGINE_ASSETS_CURRENT_RELATIVE_PATH}"
+        "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${GAMEENGINE_ASSETS_OUPUT_RELATIVE_PATH}"
 )
 
 
