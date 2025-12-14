@@ -1,5 +1,3 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include "Window.hpp"
 #include "Core/Input/Input.hpp"
 #include "Core/Logger.hpp"
@@ -49,7 +47,6 @@ namespace GameEngine
         glfwSetCursorPosCallback(glfwWindow, cursorPosCallback);
         glfwSetMouseButtonCallback(glfwWindow, mouseButtonCallback);
         glfwSetScrollCallback(glfwWindow, mouseScrollCallback);
-        glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         if (glfwRawMouseMotionSupported())
             glfwSetInputMode(glfwWindow, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
@@ -83,6 +80,11 @@ namespace GameEngine
         int height = 0;
         glfwGetWindowSize(glfwWindow,&width, &height);
         return { width, height };
+    }
+
+    void Window::setCursorMode(CursorModeValue value)
+    {
+        glfwSetInputMode(glfwWindow, GLFW_CURSOR, static_cast<int>(value));
     }
 
     void Window::framebufferSizeCallback(GLFWwindow* glfwWindow, int width, int height)

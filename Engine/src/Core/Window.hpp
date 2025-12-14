@@ -1,5 +1,6 @@
 #pragma once
-#include <functional>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <string>
 #include "Core/Events/EventDispatcher.hpp"
 #include <glm/glm.hpp>
@@ -9,6 +10,14 @@ struct GLFWwindow;
 
 namespace GameEngine
 {
+    enum class CursorModeValue : int
+    {
+        Normal = GLFW_CURSOR_NORMAL,
+        Hidden = GLFW_CURSOR_HIDDEN,
+        Disabled = GLFW_CURSOR_DISABLED,
+        Captured = GLFW_CURSOR_CAPTURED,
+    };
+
     struct WindowSettings
     {
         unsigned int width, height;
@@ -32,6 +41,8 @@ namespace GameEngine
         bool shouldClose() const;
         GLFWwindow* getNativeWindow() const;
         const glm::ivec2 getWindowSize() const;
+        void setCursorMode(CursorModeValue value);
+
         EventDispatcher<WindowResizeEvent> onWindowResize;
 
         Window(const Window&) = delete;
