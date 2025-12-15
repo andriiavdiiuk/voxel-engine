@@ -1,13 +1,13 @@
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
-#include "Shader.hpp"
+#include "Engine/Core/Graphics/Shaders/Shader.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <filesystem>
-#include "Core/Logger.hpp"
+#include "Engine/Core/Logger.hpp"
 
-namespace GameEngine
+namespace Engine
 {
     Shader::Shader(const std::string& vertexSource, const std::string& fragmentSource)
     {

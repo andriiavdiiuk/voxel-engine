@@ -1,11 +1,11 @@
-#include "Application.hpp"
-#include "Window.hpp"
-#include "Input/Input.hpp"
+#include "Engine/Core/Application.hpp"
+#include "Engine/Core/Window.hpp"
+#include "Engine/Core/Input/Input.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "Core/UI/ImGui/ImGuiBase.hpp"
-#include "Core/UI/ImGui/ImGuiDebugLayer.hpp"
-namespace GameEngine 
+#include "Engine/Core/UI/ImGui/ImGuiBase.hpp"
+#include "Engine/Core/UI/ImGui/ImGuiDebugLayer.hpp"
+namespace Engine 
 {
     Application::Application()
     {
@@ -44,7 +44,6 @@ namespace GameEngine
             window->update();
         }
         isRunning = false;
-        shutdown();
     }
 
     double Application::calculateDeltaTime()

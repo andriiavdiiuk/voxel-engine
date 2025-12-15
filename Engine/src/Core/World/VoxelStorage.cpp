@@ -1,7 +1,7 @@
-#include "VoxelStorage.hpp"
+#include "Engine/Core/World/VoxelStorage.hpp"
 #include <unordered_map>
-
-namespace GameEngine
+#include "Engine/Common/BitArray.hpp"
+namespace Engine
 {
     VoxelStorage::VoxelStorage(size_t size) : 
         indicesLength(1), 

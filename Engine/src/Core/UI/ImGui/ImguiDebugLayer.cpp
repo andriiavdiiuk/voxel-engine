@@ -1,8 +1,9 @@
-#include "ImGuiDebugLayer.hpp"
 #include <imgui/imgui.h>
-#include "Core/Resources/DefaultAssets.hpp"
-namespace GameEngine
+#include "Engine/Core/Resources/DefaultAssets.hpp"
+namespace Engine
 {
+    static ImFont* font;
+
     void ImGuiDebugLayer(bool& active)
     {
         ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | 
@@ -11,9 +12,8 @@ namespace GameEngine
                                  ImGuiWindowFlags_NoCollapse | 
                                  ImGuiWindowFlags_NoScrollbar;
 
-        ImGuiIO& io = ImGui::GetIO();
-
-        ImFont* font = io.Fonts->AddFontFromFileTTF(std::string(GameEngine::OpenSansTtfFontPath).c_str(), 24.0f);
+        if (!font)
+            font = ImGui::GetIO().Fonts->AddFontFromFileTTF(std::string(OpenSansTtfFontPath).c_str(), 24.0f);
 
         ImGui::SetNextWindowPos(ImVec2(0, 0));       
         ImGui::SetNextWindowSize(ImVec2(300, 600));    
@@ -22,6 +22,7 @@ namespace GameEngine
       
         ImGui::PushFont(font);
 
+        ImGui::LabelText("text","text");
 
         ImGui::PopFont();
 

@@ -1,6 +1,6 @@
-#include "ImGuiBase.hpp"
+#include "Engine/Core/UI/ImGui/ImGuiBase.hpp"
 
-namespace GameEngine
+namespace Engine
 {
     void initImGui(GLFWwindow* window)
     {

@@ -1,5 +1,5 @@
-#include "Texture.hpp"
-namespace GameEngine
+#include "Engine/Core/Graphics/Textures/Texture.hpp"
+namespace Engine
 {
     Texture::Texture(TextureTarget textureTarget) : textureTarget(textureTarget)
     {

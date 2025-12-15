@@ -1,13 +1,13 @@
 #include <glad/glad.h>
-#include "Texture2D.hpp"
+#include "Engine/Core/Graphics/Textures/Texture2D.hpp"
 #include <stb/stb_image.h>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include "Core/Logger.hpp"
+#include "Engine/Core/Logger.hpp"
 
-namespace GameEngine
+namespace Engine
 {
     Texture2D::Texture2D(int width, int height, ImageData data)
         : texture(TextureTarget::Texture2D)

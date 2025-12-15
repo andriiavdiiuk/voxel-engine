@@ -1,7 +1,7 @@
 #include <glad/glad.h>
-#include "IndexBufferObject.hpp"
+#include "Engine/Core/Graphics/Buffers/IndexBufferObject.hpp"
 
-namespace GameEngine
+namespace Engine
 {
     IndexBufferObject::IndexBufferObject()
     {

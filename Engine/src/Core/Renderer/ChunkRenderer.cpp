@@ -1,6 +1,6 @@
-#include "ChunkRenderer.hpp"
+#include "Engine/Core/Renderer/ChunkRenderer.hpp"
 #include <glad.h>
-namespace GameEngine
+namespace Engine
 {
     void renderChunk(const Shader& shader, const Chunk& chunk, const ChunkMesh& chunkMesh, const Camera& camera, const TextureArray& textureArray)
     {

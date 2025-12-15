@@ -1,6 +1,6 @@
-#include "Chunk.hpp"
+#include "Engine/Core/World/Chunk.hpp"
 
-namespace GameEngine
+namespace Engine
 {
     Chunk::Chunk(const glm::ivec3& chunkPosition)
         : voxels(CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE), chunkPosition(chunkPosition)

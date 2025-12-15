@@ -1,6 +1,6 @@
-#include "TextureArray.hpp"
-#include "Core/Logger.hpp"
-namespace GameEngine
+#include "Engine/Core/Graphics/Textures/TextureArray.hpp"
+#include "Engine/Core/Logger.hpp"
+namespace Engine
 {
     TextureArray::TextureArray(int width, int height, const std::unordered_map<std::string, ImageData>& textures) :
         texture(TextureTarget::Texture2DArray), textureWidth(width), textureHeight(height), texturesCount(textures.size())
@@ -8,8 +8,8 @@ namespace GameEngine
         texture.bind();
         texture.setWrapS(WrapMode::Repeat);
         texture.setWrapT(WrapMode::Repeat);
-        texture.setMinFilter(MinFilter::Linear);
-        texture.setMagFilter(MagFilter::Linear);
+        texture.setMinFilter(MinFilter::Nearest);
+        texture.setMagFilter(MagFilter::Nearest);
         glTexStorage3D(
             static_cast<GLenum>(TextureTarget::Texture2DArray), 
             1, 

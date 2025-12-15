@@ -1,39 +1,37 @@
-#include "AssetLoaders.hpp"
+#include "Engine/Core/Resources/AssetHandle.hpp"
 #include <stb/stb_image.h>
 #include <stdexcept>
-#include "Core/Graphics/Textures/Texture2D.hpp"
-#include "Core/Graphics/Textures/TextureArray.hpp"
-#include "Core/Graphics/Shaders/Shader.hpp"
-#include "Core/World/Voxel.hpp"
-#include "Core/Logger.hpp"
+#include "Engine/Core/Graphics/Textures/Texture2D.hpp"
+#include "Engine/Core/Graphics/Textures/TextureArray.hpp"
+#include "Engine/Core/Graphics/Shaders/Shader.hpp"
+#include "Engine/Core/Logger.hpp"
 #include <glaze/glaze.hpp>
-#include "Utils/FileUtils.hpp"
-#include "VoxelResource.hpp"
-#include "Core/World/WorldDefinitions.hpp"
-#include "AssetHandle.hpp"
+#include "Engine/Utils/FileUtils.hpp"
+#include "Engine/Core/Resources/VoxelResource.hpp"
+#include "Engine/Core/World/WorldDefinitions.hpp"
 
 template <>
-struct glz::meta<GameEngine::VoxelFace> {
+struct glz::meta<Engine::VoxelFace> {
     static constexpr auto value = glz::enumerate(
-        "up", GameEngine::VoxelFace::Up,
-        "down", GameEngine::VoxelFace::Down,
-        "right", GameEngine::VoxelFace::Right,
-        "left", GameEngine::VoxelFace::Left,
-        "front", GameEngine::VoxelFace::Front,
-        "back", GameEngine::VoxelFace::Back
+        "up", Engine::VoxelFace::Up,
+        "down", Engine::VoxelFace::Down,
+        "right", Engine::VoxelFace::Right,
+        "left", Engine::VoxelFace::Left,
+        "front", Engine::VoxelFace::Front,
+        "back", Engine::VoxelFace::Back
     );
 };
 
 template <>
-struct glz::meta<GameEngine::BiomeLayer>
+struct glz::meta<Engine::BiomeLayer>
 {
-    using T = GameEngine::BiomeLayer;
+    using T = Engine::BiomeLayer;
 
     static constexpr auto read_voxels = [](T& layer, std::vector<std::string> const& input, glz::context& ctx) {
         layer.voxels.clear();
         layer.voxels.reserve(input.size());
         for (auto const& s : input)
-            layer.voxels.push_back(GameEngine::AssetHandle::fromString(s));
+            layer.voxels.push_back(Engine::AssetHandle::fromString(s));
         };
 
     static constexpr auto value = glz::object(
@@ -43,12 +41,12 @@ struct glz::meta<GameEngine::BiomeLayer>
 };
 
 template <>
-struct glz::meta<GameEngine::VoxelResource>
+struct glz::meta<Engine::VoxelResource>
 {
-    using T = GameEngine::VoxelResource;
+    using T = Engine::VoxelResource;
 
     static constexpr auto read_textures = [](T& voxel, std::string const& input, glz::context& ctx) {
-        voxel.textureArray = GameEngine::AssetHandle::fromString(input);
+        voxel.textureArray = Engine::AssetHandle::fromString(input);
     };
 
     static constexpr auto value = glz::object(
@@ -72,7 +70,7 @@ void loadJson(T& out, const std::string& path, const std::string& descName)
 }
 
 
-namespace GameEngine
+namespace Engine
 {
 
     ImageData loadImageData(const std::string& path, int& width, int& height, int& nrChannels, int desired_channels)

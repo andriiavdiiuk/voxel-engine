@@ -1,12 +1,12 @@
-#include "ChunkMesh.hpp"
+#include "Engine/Core/Graphics/Meshing/ChunkMesh.hpp"
 #include <glm/glm.hpp>
 #include <glad.h>
-#include "Core/Logger.hpp"
-#include "Core/World/Chunk.hpp"
-#include "Core/Resources/AssetStorage.hpp"
-#include "Core/Resources/VoxelResource.hpp"
-#include "Core/Graphics/Textures/TextureArray.hpp"
-namespace GameEngine
+#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/World/Chunk.hpp"
+#include "Engine/Core/Resources/AssetStorage.hpp"
+#include "Engine/Core/Resources/VoxelResource.hpp"
+#include "Engine/Core/Graphics/Textures/TextureArray.hpp"
+namespace Engine
 {
     constexpr uint8_t cubeUV[] =
     {

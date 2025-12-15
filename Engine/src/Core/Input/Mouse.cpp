@@ -1,7 +1,7 @@
-#include "Mouse.hpp"
+#include "Engine/Core/Input/Mouse.hpp"
 #include <GLFW/glfw3.h>
 
-namespace GameEngine
+namespace Engine
 {
     static bool firstMouse = false;
     bool Mouse::isKeyDown(MouseButton key) const

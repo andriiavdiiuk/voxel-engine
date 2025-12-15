@@ -1,10 +1,11 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/hash.hpp>
-#include "WorldGenerator.hpp"
-#include "Common/Noises/PerlinNoise.hpp"
+#include "Engine/Core/World/WorldGenerator.hpp"
+#include "Engine/Core/Resources/AssetHandle.hpp"
+#include "Engine/Common/Noises/PerlinNoise.hpp"
 #include <random>
 
-namespace GameEngine
+namespace Engine
 {
     static int random_weighted_index(const std::vector<double>& weights, size_t seed) {
         thread_local std::mt19937 gen(seed);
@@ -12,7 +13,7 @@ namespace GameEngine
         return dist(gen);
     }
 
-    static const GameEngine::AssetHandle& pickRandomVoxel(const std::vector<GameEngine::AssetHandle>& voxels, glm::ivec3 position)
+    static const AssetHandle& pickRandomVoxel(const std::vector<AssetHandle>& voxels, glm::ivec3 position)
     {
         thread_local std::mt19937 gen(std::hash<glm::ivec3>{}(position));
         std::uniform_int_distribution<> dist(0, static_cast<int>(voxels.size()) - 1);
@@ -44,15 +45,15 @@ namespace GameEngine
 
          std::shared_ptr<Biome> biome = pickBiome(params.biomes, position);
 
-        for (int x = 0; x < GameEngine::CHUNK_SIZE; x++)
+        for (int x = 0; x < CHUNK_SIZE; x++)
         {
-            for (int z = 0; z < GameEngine::CHUNK_SIZE; z++)
+            for (int z = 0; z < CHUNK_SIZE; z++)
             {
-                double worldX = position.x * GameEngine::CHUNK_SIZE + x;
-                double worldZ = position.z * GameEngine::CHUNK_SIZE + z;
+                double worldX = position.x * CHUNK_SIZE + x;
+                double worldZ = position.z * CHUNK_SIZE + z;
 
-                double height = GameEngine::perlinNoiseOctave2D(worldX, worldZ, params.seed, octaves, gridSize, contrast);
-                int maxY = static_cast<int>(height * GameEngine::CHUNK_SIZE);
+                double height = perlinNoiseOctave2D(worldX, worldZ, params.seed, octaves, gridSize, contrast);
+                int maxY = static_cast<int>(height * CHUNK_SIZE);
                 
                 int currentY = maxY;
 
@@ -60,7 +61,7 @@ namespace GameEngine
                     for (int i = 0; i < layer.thickness && currentY >= 0; i++) {
                         auto voxel = pickRandomVoxel(layer.voxels, glm::ivec3{x,i,z});
 
-                        chunk.setVoxel(glm::ivec3(x, currentY, z), GameEngine::Voxel{ voxel });
+                        chunk.setVoxel(glm::ivec3(x, currentY, z), Voxel{ voxel });
 
                         currentY--;
                     }

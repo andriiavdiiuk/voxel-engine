@@ -1,8 +1,8 @@
-#include "Window.hpp"
-#include "Core/Input/Input.hpp"
-#include "Core/Logger.hpp"
+#include "Engine/Core/Window.hpp"
+#include "Engine/Core/Input/Input.hpp"
+#include "Engine/Core/Logger.hpp"
 
-namespace GameEngine
+namespace Engine
 {
     Window::Window(const WindowSettings& windowSettings, std::shared_ptr<Input> input) : input(std::move(input))
     {

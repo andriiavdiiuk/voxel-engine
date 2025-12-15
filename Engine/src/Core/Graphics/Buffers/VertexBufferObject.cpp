@@ -1,7 +1,7 @@
 #include <glad/glad.h>
-#include "VertexBufferObject.hpp";
+#include "Engine/Core/Graphics/Buffers/VertexBufferObject.hpp";
 
-namespace GameEngine
+namespace Engine
 {
     VertexBufferObject::VertexBufferObject()
     {

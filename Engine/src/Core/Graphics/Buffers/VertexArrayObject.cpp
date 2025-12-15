@@ -1,7 +1,7 @@
 #include "glad/glad.h"
-#include "VertexArrayObject.hpp"
-#include "Core/Logger.hpp"
-namespace GameEngine
+#include "Engine/Core/Graphics/Buffers/VertexArrayObject.hpp"
+#include "Engine/Core/Logger.hpp"
+namespace Engine
 {
     VertexArrayObject::VertexArrayObject()
     {

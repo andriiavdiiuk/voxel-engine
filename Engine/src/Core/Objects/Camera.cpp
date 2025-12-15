@@ -1,8 +1,8 @@
-#include "Camera.hpp"
+#include "Engine/Core/Objects/Camera.hpp"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
-#include "Core/Logger.hpp"
-namespace GameEngine
+#include "Engine/Core/Logger.hpp"
+namespace Engine
 {
     Camera::Camera(const glm::vec3& position, const glm::vec3& front, const glm::vec3& up)
         : fov(90), near(0.1f), far(100), forward(glm::vec3(0.0f))

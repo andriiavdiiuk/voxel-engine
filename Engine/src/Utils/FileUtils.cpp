@@ -1,10 +1,10 @@
-#include "FileUtils.hpp"
+#include "Engine/Utils/FileUtils.hpp"
 #include <fstream>
 #include <sstream>
 #include <filesystem>
-#include "Core/Logger.hpp"
+#include "Engine/Core/Logger.hpp"
 
-namespace GameEngine
+namespace Engine
 {
     std::string readFile(const std::string& path)
     {

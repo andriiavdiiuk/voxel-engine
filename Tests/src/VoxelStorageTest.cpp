@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
-#include <Core/World/VoxelStorage.hpp>
-#include <Core/World/Voxel.hpp>
+#include <Engine/Core/World/VoxelStorage.hpp>
+#include <Engine/Core/World/Voxel.hpp>
 
 constexpr int chunkBlocks = 16 * 16 * 16;
 
 TEST(VoxelStorageTest, SingleVoxelType) {
-    GameEngine::VoxelStorage storage(chunkBlocks);
-    GameEngine::Voxel voxel{ 1 };
+    Engine::VoxelStorage storage(chunkBlocks);
+    Engine::Voxel voxel{ 1 };
 
     for (size_t i = 0; i < chunkBlocks; i++) {
         storage.setVoxel(i, voxel);
@@ -19,8 +19,8 @@ TEST(VoxelStorageTest, SingleVoxelType) {
 }
 
 TEST(VoxelStorageTest, FewVoxelTypes) {
-    GameEngine::VoxelStorage storage(chunkBlocks);
-    std::vector<GameEngine::Voxel> types = { {1}, {2}, {3}, {4} };
+    Engine::VoxelStorage storage(chunkBlocks);
+    std::vector<Engine::Voxel> types = { {1}, {2}, {3}, {4} };
 
     for (size_t i = 0; i < chunkBlocks; i++) {
         storage.setVoxel(i, types[i % types.size()]);
@@ -33,21 +33,21 @@ TEST(VoxelStorageTest, FewVoxelTypes) {
 }
 
 TEST(VoxelStorageTest, UniqueVoxelTypes) {
-    GameEngine::VoxelStorage storage(4096);
+    Engine::VoxelStorage storage(4096);
 
     for (size_t i = 0; i < chunkBlocks; i++) {
-        storage.setVoxel(i, GameEngine::Voxel{i});
+        storage.setVoxel(i, Engine::Voxel{i});
     }
 
     for (size_t i = 0; i < chunkBlocks; i++) {
-        EXPECT_EQ(storage.getVoxel(i), GameEngine::Voxel{ i });
+        EXPECT_EQ(storage.getVoxel(i), Engine::Voxel{ i });
     }
 }
 
 TEST(VoxelStorageTest, AccessUnsetVoxelReturnsEmptyVoxel) {
-    GameEngine::VoxelStorage storage(chunkBlocks);
+    Engine::VoxelStorage storage(chunkBlocks);
 
-    GameEngine::Voxel airVoxel{ 0 };  // empty voxel
+    Engine::Voxel airVoxel{ 0 };  // empty voxel
 
     for (size_t i = 0; i < chunkBlocks; ++i) {
         EXPECT_EQ(storage.getVoxel(i), airVoxel);
@@ -55,17 +55,17 @@ TEST(VoxelStorageTest, AccessUnsetVoxelReturnsEmptyVoxel) {
 }
 
 TEST(VoxelStorageTest, FitData) {
-    GameEngine::VoxelStorage storage(chunkBlocks);
+    Engine::VoxelStorage storage(chunkBlocks);
 
     for (size_t i = 0; i < chunkBlocks; ++i) {
-        storage.setVoxel(i, GameEngine::Voxel{ i % 32 });
+        storage.setVoxel(i, Engine::Voxel{ i % 32 });
     }
 
     EXPECT_EQ(storage.getPaletteSize(), 32);
     EXPECT_EQ(storage.getIndicesLength(), 5);
 
     for (size_t i = 0; i < chunkBlocks; ++i) {
-        storage.setVoxel(i, GameEngine::Voxel{ i%5 });
+        storage.setVoxel(i, Engine::Voxel{ i%5 });
     }
 
     storage.fitData();
@@ -74,6 +74,6 @@ TEST(VoxelStorageTest, FitData) {
     EXPECT_EQ(storage.getIndicesLength(), 3);
 
     for (size_t i = 0; i < chunkBlocks; ++i) {
-        EXPECT_EQ(storage.getVoxel(i), GameEngine::Voxel{ i%5 });
+        EXPECT_EQ(storage.getVoxel(i), Engine::Voxel{ i%5 });
     }
 }

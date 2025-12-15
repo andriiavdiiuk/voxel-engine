@@ -1,4 +1,4 @@
-#include "PerlinNoise.hpp"
+#include "Engine/Common/Noises/PerlinNoise.hpp"
 #include <cmath>
 
 struct Coords
@@ -55,7 +55,7 @@ static double dotGridGradient2D(size_t ix, size_t iy, double x, double y, size_t
 
 }
 
-namespace GameEngine
+namespace Engine
 {
     double perlinNoise2D(double x, double y, size_t seed)
     {

@@ -1,10 +1,10 @@
-#include "BitArray.hpp"
+#include "Engine/Common/BitArray.hpp"
 #include <string>
-#include "Core/Logger.hpp"
+#include "Engine/Core/Logger.hpp"
 #include <bitset>
 #include <limits>
 
-namespace GameEngine
+namespace Engine
 {
     BitArray::BitArray(size_t totalBits) : 
         buffer((totalBits + 7) / 8,0)

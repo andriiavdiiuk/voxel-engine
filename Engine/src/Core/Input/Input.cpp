@@ -1,6 +1,6 @@
-#include "Input.hpp"
+#include "Engine/Core/Input/Input.hpp"
 
-namespace GameEngine
+namespace Engine
 {
     void Input::update()
     {

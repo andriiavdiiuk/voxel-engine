@@ -1,8 +1,8 @@
-#include "Keyboard.hpp"
-#include "Core/Input/Key.hpp"
+#include "Engine/Core/Input/Keyboard.hpp"
+#include "Engine/Core/Input/Key.hpp"
 #include <GLFW/glfw3.h>
 
-namespace GameEngine
+namespace Engine
 {
     bool Keyboard::isKeyDown(Key key) const
     {
