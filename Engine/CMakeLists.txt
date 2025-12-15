@@ -82,7 +82,7 @@ add_library(GameEngine
     src/Core/UI/ImGui/ImGuiBase.cpp
     src/Core/UI/ImGui/ImGuiBase.hpp
     src/Core/UI/ImGui/ImGuiDebugLayer.hpp
-    src/Core/UI/ImGui/ImguiDebugLayer.cpp
+    src/Core/UI/ImGui/ImGuiDebugLayer.cpp
     
     src/Utils/FileUtils.hpp
     src/Utils/FileUtils.cpp)   
@@ -111,7 +111,7 @@ endif()
 set(GAMEENGINE_ASSETS_CURRENT_RELATIVE_PATH "assets")
 set(GAMEENGINE_ASSETS_OUPUT_RELATIVE_PATH "engine/assets")
 target_compile_definitions(GameEngine PUBLIC
-    GAMEENGINE_ASSETS_RELATIVE_PATH=\"${GAMEENGINE_ASSETS_CURRENT_RELATIVE_PATH}\"
+    GAMEENGINE_ASSETS_RELATIVE_PATH=\"${GAMEENGINE_ASSETS_OUPUT_RELATIVE_PATH}\"
 )
 add_custom_command(TARGET GameEngine PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
