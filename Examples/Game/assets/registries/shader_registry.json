@@ -1,0 +1,4 @@
+{
+    "base_shader": "assets/shaders/base_shader.json",
+    "voxel_shader": "assets/shaders/voxel_shader.json"
+}

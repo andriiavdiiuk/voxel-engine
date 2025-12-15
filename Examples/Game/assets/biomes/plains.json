@@ -1,0 +1,17 @@
+{
+    "weight": 5,
+    "layers": [
+        {
+            "voxels": [
+                "grass"
+            ],
+            "thickness": 1
+        },
+        {
+            "voxels": [
+                "dirt"
+            ],
+            "thickness": 10
+        }
+    ]
+}

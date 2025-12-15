@@ -1,0 +1,11 @@
+{
+    "textureArray": "textures",
+    "textures": {
+        "front": "grass_block_side",
+        "back": "grass_block_side",
+        "up": "grass_block_top",
+        "down": "dirt",
+        "left": "grass_block_side",
+        "right": "grass_block_side"
+    }
+}

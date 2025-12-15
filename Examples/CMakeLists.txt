@@ -1,1 +1,1 @@
-add_subdirectory(TestGame)
+add_subdirectory(Game)
