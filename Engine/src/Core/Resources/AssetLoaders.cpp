@@ -9,6 +9,7 @@
 #include <glaze/glaze.hpp>
 #include "Utils/FileUtils.hpp"
 #include "VoxelResource.hpp"
+#include "Core/World/WorldDefinitions.hpp"
 #include "AssetHandle.hpp"
 
 template <>
@@ -23,6 +24,23 @@ struct glz::meta<GameEngine::VoxelFace> {
     );
 };
 
+template <>
+struct glz::meta<GameEngine::BiomeLayer>
+{
+    using T = GameEngine::BiomeLayer;
+
+    static constexpr auto read_voxels = [](T& layer, std::vector<std::string> const& input, glz::context& ctx) {
+        layer.voxels.clear();
+        layer.voxels.reserve(input.size());
+        for (auto const& s : input)
+            layer.voxels.push_back(GameEngine::AssetHandle::fromString(s));
+        };
+
+    static constexpr auto value = glz::object(
+        "voxels", glz::custom<read_voxels, &T::voxels>,
+        "thickness", &T::thickness
+    );
+};
 
 template <>
 struct glz::meta<GameEngine::VoxelResource>
@@ -133,8 +151,19 @@ namespace GameEngine
 
     std::shared_ptr<VoxelResource> loadVoxel(const std::string& path)
     {
-        VoxelResource data{};
-        loadJson<VoxelResource>(data, path, "voxel");
-        return std::make_shared<VoxelResource>(data);
+        VoxelResourceJson data{};
+        loadJson<VoxelResourceJson>(data, path, "voxel");
+        VoxelResource resource = VoxelResource();
+        resource.textureArray = AssetHandle::fromString(data.textureArray);
+        resource.textures = data.textures;
+        return std::make_shared<VoxelResource>(resource);
+    }
+
+
+    std::shared_ptr<Biome> loadBiome(const std::string& path)
+    {
+        Biome data{};
+        loadJson<Biome>(data, path, "biome");
+        return std::make_shared<Biome>(data);
     }
 }
