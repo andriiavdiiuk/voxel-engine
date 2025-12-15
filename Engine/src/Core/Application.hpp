@@ -11,8 +11,7 @@ namespace GameEngine
     {
     public:
         Application();
-        virtual ~Application() = default;
-        virtual void init() = 0;
+        virtual ~Application();
         virtual void update(double deltaTime) = 0;
         virtual void render(double deltaTime) = 0;
         virtual void shutdown() = 0;
@@ -21,6 +20,7 @@ namespace GameEngine
     protected:
         std::shared_ptr<Window> window;
         std::shared_ptr<Input> input;
+        bool debugWindow = false;
 
     private:
         bool isRunning = false;

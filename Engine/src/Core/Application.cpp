@@ -3,6 +3,8 @@
 #include "Input/Input.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "Core/UI/ImGui/ImGuiBase.hpp"
+#include "Core/UI/ImGui/ImGuiDebugLayer.hpp"
 namespace GameEngine 
 {
     Application::Application()
@@ -13,19 +15,32 @@ namespace GameEngine
         glCullFace(GL_BACK);
         glFrontFace(GL_CCW);
         glEnable(GL_DEPTH_TEST);
+
+        window->setCursorMode(CursorModeValue::Normal);
+
+        initImGui(window->getNativeWindow());
+    }
+
+    Application::~Application()
+    {
+        shutdownImGui();
     }
 
     void Application::run()
     {
         isRunning = true;
-
+        debugWindow = true;
         while (isRunning && !window->shouldClose())
         {
             double deltaTime = calculateDeltaTime();
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            beginImGuiFrame();
+            ImGuiDebugLayer(debugWindow);
             update(deltaTime);
             render(deltaTime);
+            endImGuiFrame();
             window->update();
         }
         isRunning = false;
