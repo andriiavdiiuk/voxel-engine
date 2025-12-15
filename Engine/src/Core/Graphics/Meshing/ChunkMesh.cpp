@@ -17,10 +17,10 @@ namespace Engine
         0b00,
 
         // Back face 
-        0b11,
         0b01,
         0b00,
         0b10,
+        0b11,
 
         // Top face
         0b01,
@@ -42,9 +42,9 @@ namespace Engine
 
         // Left face
         0b01,
-        0b00,
+        0b11,
         0b10,
-        0b11
+        0b00
     };
 
     constexpr uint8_t cubeVertecies[] =
