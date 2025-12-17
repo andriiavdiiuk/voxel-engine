@@ -19,7 +19,6 @@ namespace Engine
 
         void lookAt(const glm::vec3& position, const glm::vec3& target, const glm::vec3& up);
         void createProjection(float width, float height);
-        void rotate(double deltaX, double deltaY);
         void onWindowResize(const WindowResizeEvent& event);
 
         const glm::mat4& getView() const;

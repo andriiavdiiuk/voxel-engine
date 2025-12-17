@@ -50,7 +50,10 @@ namespace Engine
         double deltaY = delta.y * mouseSensitivity;
         if (deltaX != 0 || deltaY != 0)
         {
-            camera.rotate(deltaX, deltaY);
+            glm::quat yaw = glm::angleAxis(glm::radians(deltaX), glm::dvec3(0.0, 1.0, 0.0));
+            glm::quat pitch = glm::angleAxis(glm::radians(deltaY), glm::dvec3(1.0, 0.0, 0.0));
+            glm::quat q = glm::normalize(pitch * camera.transform.rotation * yaw);
+            camera.transform.rotation = glm::normalize(q);
         }
 
         camera.update(deltaTime);

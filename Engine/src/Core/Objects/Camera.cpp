@@ -1,4 +1,4 @@
-#include "Engine/Core/Objects/Camera.hpp"
+﻿#include "Engine/Core/Objects/Camera.hpp"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 #include "Engine/Core/Logger.hpp"
@@ -13,10 +13,6 @@ namespace Engine
 
         lookAt(position, position + front, up);
         createProjection(1280, 768);
-        //GameEngine::Engine::getWindow().onWindowResize.subscribe([camera = this](const GameEngine::WindowResizeEvent& e)
-        //{
-        //    camera->onWindowResize(e);
-        //});
     }
 
     Camera::~Camera()
@@ -65,18 +61,9 @@ namespace Engine
 
     void Camera::calculateVectors()
     {
-        right = glm::vec3(view[0][0], view[1][0], view[2][0]);
-        up = glm::vec3(view[0][1], view[1][1], view[2][1]);
-        forward = -glm::vec3(view[0][2], view[1][2], view[2][2]);
-    }
-
-    void Camera::rotate(double deltaX, double deltaY)
-    {
-        glm::quat pitch = glm::angleAxis(glm::radians(deltaY), glm::dvec3(1.0f, 0.0f, 0.0f));
-        glm::quat yaw = glm::angleAxis(glm::radians(deltaX), glm::dvec3(0.0f, 1.0f, 0.0f));
-        transform.rotation = glm::normalize(pitch * yaw * transform.rotation);
-        calculateVectors();
-        calculateView();
+        right = glm::conjugate(transform.rotation) * glm::vec3(1.0, 0.0, 0.0);
+        up = glm::conjugate(transform.rotation) * glm::vec3(0.0, 1.0, 0.0);
+        forward = glm::conjugate(transform.rotation) * glm::vec3(0.0, 0.0, -1.0);
     }
 
     void Camera::onWindowResize(const WindowResizeEvent& event)
