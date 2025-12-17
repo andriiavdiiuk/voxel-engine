@@ -3,20 +3,37 @@
 #include "Engine/Core/Input/Input.hpp"
 #include "Engine/Core/Logger.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
+#include "Engine/Core/Window.hpp"
+using namespace std::placeholders;
+
 namespace Engine
 {
-    CameraController::CameraController(std::shared_ptr<Input> input) :
-        camera(Camera(glm::vec3(0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f))),
+    CameraController::CameraController(std::shared_ptr<Input> input, std::shared_ptr<Window> window) :
+        camera(Camera(glm::vec3(0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(window->getWindowSize()))),
         speed(20.0f),
         jumpForce(10.0f),
         mouseSensitivity(0.5),
-        input(std::move(input))
+        input(std::move(input)),
+        window(std::move(window))
     {
+        windowResizeHandle = this->window->onWindowResize.subscribe(
+            [this](const WindowResizeEvent& e) {
+                camera.createProjection(static_cast<float>(e.width),
+                    static_cast<float>(e.height));
+            }
+        );
     }
+
     CameraController::~CameraController()
     {
-
+        window->onWindowResize.unsubcribe(windowResizeHandle);
     }
+
+    const Camera& CameraController::getCamera() const
+    {
+        return camera;
+    }
+
     void CameraController::update(double deltaTime)
     {
         const Keyboard& keyboard = input->getKeyboard();

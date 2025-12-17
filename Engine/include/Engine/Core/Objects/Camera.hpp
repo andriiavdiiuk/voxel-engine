@@ -3,6 +3,7 @@
 #include "GameObject.hpp"
 #include "Engine/Core/Window.hpp"
 #include "Engine/Core/Components/Transform.hpp"
+#include <memory>
 namespace Engine
 {
     class Camera
@@ -14,12 +15,11 @@ namespace Engine
 
         Transform transform;
 
-        Camera(const glm::vec3& position, const glm::vec3& front, const glm::vec3& up);
+        Camera(const glm::vec3& position, const glm::vec3& front, const glm::vec3& up, const glm::vec2& viewport);
         ~Camera();
 
         void lookAt(const glm::vec3& position, const glm::vec3& target, const glm::vec3& up);
         void createProjection(float width, float height);
-        void onWindowResize(const WindowResizeEvent& event);
 
         const glm::mat4& getView() const;
         const glm::mat4& getProjection() const;

@@ -4,7 +4,7 @@
 #include "Engine/Core/Logger.hpp"
 namespace Engine
 {
-    Camera::Camera(const glm::vec3& position, const glm::vec3& front, const glm::vec3& up)
+    Camera::Camera(const glm::vec3& position, const glm::vec3& front, const glm::vec3& up, const glm::vec2& viewport)
         : fov(90), near(0.1f), far(100), forward(glm::vec3(0.0f))
     {
         this->forward = front;
@@ -12,12 +12,12 @@ namespace Engine
         this->transform.position = position;
 
         lookAt(position, position + front, up);
-        createProjection(1280, 768);
+        createProjection(viewport.x, viewport.y);
     }
 
     Camera::~Camera()
     {
-
+      
     }
 
     const glm::mat4& Camera::getView() const
@@ -64,11 +64,6 @@ namespace Engine
         right = glm::conjugate(transform.rotation) * glm::vec3(1.0, 0.0, 0.0);
         up = glm::conjugate(transform.rotation) * glm::vec3(0.0, 1.0, 0.0);
         forward = glm::conjugate(transform.rotation) * glm::vec3(0.0, 0.0, -1.0);
-    }
-
-    void Camera::onWindowResize(const WindowResizeEvent& event)
-    {
-        createProjection(event.width, event.height);
     }
 
     void Camera::update(double deltaTime)
