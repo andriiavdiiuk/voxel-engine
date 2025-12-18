@@ -16,7 +16,7 @@ namespace Engine
         glFrontFace(GL_CCW);
         glEnable(GL_DEPTH_TEST);
 
-        window->setCursorMode(CursorModeValue::Normal);
+        window->setCursorMode(CursorModeValue::Disabled);
 
         initImGui(window->getNativeWindow());
     }
@@ -32,16 +32,17 @@ namespace Engine
         debugWindow = true;
         while (isRunning && !window->shouldClose())
         {
+            window->pollEvents();
             double deltaTime = calculateDeltaTime();
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             beginImGuiFrame();
-            ImGuiDebugLayer(debugWindow);
             update(deltaTime);
             render(deltaTime);
             endImGuiFrame();
-            window->update();
+            input->update();
+            window->swapBuffer();
         }
         isRunning = false;
     }

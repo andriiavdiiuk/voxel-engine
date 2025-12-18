@@ -60,15 +60,6 @@ namespace Engine
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     }
 
-    void Window::update()
-    {
-        glfwSwapBuffers(glfwWindow);
-
-        glfwPollEvents();
-        input->update();
-    }
-
-
     bool Window::shouldClose() const
     {
         return glfwWindowShouldClose(glfwWindow);
@@ -85,6 +76,16 @@ namespace Engine
     void Window::setCursorMode(CursorModeValue value)
     {
         glfwSetInputMode(glfwWindow, GLFW_CURSOR, static_cast<int>(value));
+    }
+
+    void Window::pollEvents()
+    {
+        glfwPollEvents();
+    }
+
+    void Window::swapBuffer()
+    {
+        glfwSwapBuffers(glfwWindow);
     }
 
     void Window::framebufferSizeCallback(GLFWwindow* glfwWindow, int width, int height)

@@ -37,11 +37,12 @@ namespace Engine
     public:
         Window(const WindowSettings& windowSettings, std::shared_ptr<Input> input);
         ~Window();
-        void update();
         bool shouldClose() const;
         GLFWwindow* getNativeWindow() const;
         const glm::ivec2 getWindowSize() const;
         void setCursorMode(CursorModeValue value);
+        void pollEvents();
+        void swapBuffer();
 
         EventDispatcher<WindowResizeEvent> onWindowResize;
 
