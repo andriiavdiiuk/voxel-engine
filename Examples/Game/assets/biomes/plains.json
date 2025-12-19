@@ -12,6 +12,12 @@
                 "dirt"
             ],
             "thickness": 10
+        },
+        {
+            "voxels": [
+                "stone"
+            ],
+            "thickness": 30
         }
     ]
 }

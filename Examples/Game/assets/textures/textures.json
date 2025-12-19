@@ -10,5 +10,9 @@
     {
         "name": "grass_block_side",
         "path": "assets/textures/blocks/grass_block_side.png"
+    },
+    {
+        "name": "stone",
+        "path": "assets/textures/blocks/stone.png"
     }
 ]

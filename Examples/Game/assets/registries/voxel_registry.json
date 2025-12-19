@@ -1,4 +1,5 @@
 {
     "dirt": "assets/voxels/dirt.json",
-    "grass": "assets/voxels/grass.json"
+    "grass": "assets/voxels/grass.json",
+    "stone": "assets/voxels/stone.json"
 }

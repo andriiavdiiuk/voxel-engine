@@ -1,0 +1,11 @@
+{
+    "textureArray": "textures",
+    "textures": {
+        "front": "stone",
+        "back": "stone",
+        "up": "stone",
+        "down": "stone",
+        "left": "stone",
+        "right": "stone"
+    }
+}
