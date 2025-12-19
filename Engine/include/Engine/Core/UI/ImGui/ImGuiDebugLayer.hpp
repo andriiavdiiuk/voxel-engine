@@ -2,5 +2,7 @@
 
 namespace Engine
 {
-    void ImGuiDebugLayer(bool& active);
+    class Camera;
+
+    void CameraDebug(bool& active, const Camera& camera);
 }
