@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include "Voxel.hpp"
 #include <string>
+#include "Engine/Common/Noises/PerlinNoiseParams.hpp"
 
 namespace Engine
 {
@@ -15,5 +15,6 @@ namespace Engine
     {
         double weight;
         std::vector<BiomeLayer> layers;
+        PerlinNoiseParams noise;
     };
 }

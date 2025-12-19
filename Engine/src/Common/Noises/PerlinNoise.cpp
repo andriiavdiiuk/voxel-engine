@@ -1,4 +1,5 @@
 #include "Engine/Common/Noises/PerlinNoise.hpp"
+#include "Engine/Common/Noises/PerlinNoiseParams.hpp"
 #include <cmath>
 
 struct Coords
@@ -84,19 +85,19 @@ namespace Engine
         return value;
     }
 
-    double perlinNoiseOctave2D(double x, double y, size_t seed, int octaves, int gridSize, double contrast)
+    double perlinNoiseOctave2D(double x, double y, size_t seed, const PerlinNoiseParams& params)
     {
         double frequency = 1;
         double amplitude = 1;
         double value = 0;
-        for (int i = 0; i < octaves; i++)
+        for (int i = 0; i < params.octaves; i++)
         {
-            value += perlinNoise2D(x * frequency / gridSize, y * frequency / gridSize, seed) * amplitude;
+            value += perlinNoise2D(x * frequency / params.gridSize, y * frequency / params.gridSize, seed) * amplitude;
 
             amplitude /= 2;
             frequency *= 2;
         }
-        value *= contrast;
+        value *= params.contrast;
         value = (value + 1) / 2;
         // Clipping
         if (value > 1.0f)
@@ -110,18 +111,18 @@ namespace Engine
         return value;
     }
 
-    std::vector<std::vector<double>> perlinNoise2D(int width, int height, int startX, int startY, int octaves, int gridSize, double contrast, size_t seed)
+    std::vector<std::vector<double>> perlinNoise2D(const PerlinNoiseGridParams& params, size_t seed)
     {
-        std::vector<std::vector<double>> noise(height, std::vector<double>(width, 0.0));
+        std::vector<std::vector<double>> noise(params.height, std::vector<double>(params.width, 0.0));
 
-        for (int i = 0; i < width; ++i)       
+        for (int i = 0; i < params.width; ++i)
         {
-            for (int j = 0; j < height; ++j)  
+            for (int j = 0; j < params.height; ++j)
             {
-                double x = startX + i;
-                double y = startY + j;
+                double x = params.startX + i;
+                double y = params.startY + j;
 
-                double val = perlinNoiseOctave2D(x, y, seed, octaves, gridSize, contrast);
+                double val = perlinNoiseOctave2D(x, y, seed, params.noise);
 
                 noise[i][j] = val; 
             }

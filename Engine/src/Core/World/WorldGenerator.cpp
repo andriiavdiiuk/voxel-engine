@@ -52,13 +52,9 @@ namespace Engine
             throw std::out_of_range(msg);
         }
 
-        constexpr double scale = 16.0;
-        constexpr int octaves = 4;
-        constexpr int gridSize = 64;
-        constexpr double contrast = 1.0;
 
         std::shared_ptr<Biome> biome = pickBiome(params.biomes, position);
-    
+
         for (int x = 0; x < CHUNK_SIZE; x++)
         {
             for (int z = 0; z < CHUNK_SIZE; z++)
@@ -66,7 +62,7 @@ namespace Engine
                 double worldX = position.x * CHUNK_SIZE + x;
                 double worldZ = position.z * CHUNK_SIZE + z;
 
-                double noiseHeight = perlinNoiseOctave2D(worldX, worldZ, params.seed, octaves, gridSize, contrast);
+                double noiseHeight = perlinNoiseOctave2D(worldX, worldZ, params.seed, biome->noise);
 
                 int chunkWorldBottom = position.y * CHUNK_SIZE;
                 int chunkWorldTop = chunkWorldBottom + CHUNK_SIZE - 1;

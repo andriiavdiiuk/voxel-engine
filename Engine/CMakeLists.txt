@@ -39,6 +39,7 @@ set(ENGINE_HEADERS
     "include/Engine/Common//Bimap.hpp"
     "include/Engine/Common/BitArray.hpp"
     "include/Engine/Common/Noises/PerlinNoise.hpp"
+    "include/Engine/Common/Noises/PerlinNoiseParams.hpp"
 
     "include/Engine/Core/Resources/AssetHandle.hpp"
     "include/Engine/Core/Resources/AssetStorage.hpp"

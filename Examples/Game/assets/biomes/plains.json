@@ -1,5 +1,10 @@
 {
     "weight": 5,
+    "noise": {
+        "octaves": 4,
+        "gridSize": 64,
+        "contrast": 0.3
+    },
     "layers": [
         {
             "voxels": [
