@@ -3,6 +3,7 @@
 #include "Engine/Core/World/WorldGenerator.hpp"
 #include "Engine/Core/Resources/AssetHandle.hpp"
 #include "Engine/Common/Noises/PerlinNoise.hpp"
+#include "Engine/Core/Logger.hpp"
 #include <random>
 
 namespace Engine
@@ -38,13 +39,26 @@ namespace Engine
 
     void WorldGenerator::generate(glm::ivec3 position, Chunk& chunk)
     {
+        if (position.y < params.minWorldHeight / CHUNK_SIZE || position.y > params.maxWorldHeight / CHUNK_SIZE)
+        {
+            std::string msg = std::format(
+                "Chunk Y coordinate {} is outside the world bounds [{}..{}]",
+                position.y,
+                params.minWorldHeight / CHUNK_SIZE,
+                params.maxWorldHeight / CHUNK_SIZE
+            );
+
+            LOG_ERROR(msg);
+            throw std::out_of_range(msg);
+        }
+
         constexpr double scale = 16.0;
         constexpr int octaves = 4;
         constexpr int gridSize = 64;
         constexpr double contrast = 1.0;
 
-         std::shared_ptr<Biome> biome = pickBiome(params.biomes, position);
-
+        std::shared_ptr<Biome> biome = pickBiome(params.biomes, position);
+    
         for (int x = 0; x < CHUNK_SIZE; x++)
         {
             for (int z = 0; z < CHUNK_SIZE; z++)
@@ -52,19 +66,40 @@ namespace Engine
                 double worldX = position.x * CHUNK_SIZE + x;
                 double worldZ = position.z * CHUNK_SIZE + z;
 
-                double height = perlinNoiseOctave2D(worldX, worldZ, params.seed, octaves, gridSize, contrast);
-                int maxY = static_cast<int>(height * CHUNK_SIZE);
-                
-                int currentY = maxY;
+                double noiseHeight = perlinNoiseOctave2D(worldX, worldZ, params.seed, octaves, gridSize, contrast);
 
-                for (const auto& layer : biome->layers) {
-                    for (int i = 0; i < layer.thickness && currentY >= 0; i++) {
-                        auto voxel = pickRandomVoxel(layer.voxels, glm::ivec3{x,i,z});
+                int chunkWorldBottom = position.y * CHUNK_SIZE;
+                int chunkWorldTop = chunkWorldBottom + CHUNK_SIZE - 1;
 
-                        chunk.setVoxel(glm::ivec3(x, currentY, z), Voxel{ voxel });
+                int surfaceY =
+                    static_cast<int>(noiseHeight * (params.maxWorldHeight - params.minWorldHeight)) +
+                    params.minWorldHeight;
 
-                        currentY--;
+                int currentLayerTopY = surfaceY;
+
+                for (const auto& layer : biome->layers)
+                {
+                    int layerTopY = currentLayerTopY;
+                    int layerBottomY = currentLayerTopY - layer.thickness + 1;
+
+                    int writeTopY = std::min(layerTopY, chunkWorldTop);
+                    int writeBottomY = std::max(layerBottomY, chunkWorldBottom);
+
+                    if (writeTopY >= writeBottomY)
+                    {
+                        int blocksToWrite = writeTopY - writeBottomY + 1;
+
+                        for (int n = 0; n < blocksToWrite; ++n)
+                        {
+                            int worldY = writeTopY - n;
+                            int localY = worldY - chunkWorldBottom;
+
+                            auto voxel = pickRandomVoxel(layer.voxels, { x, localY, z });
+                            chunk.setVoxel({ x, localY, z }, Voxel{ voxel });
+                        }
                     }
+
+                    currentLayerTopY = layerBottomY - 1;
                 }
             }
         }

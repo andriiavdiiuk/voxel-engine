@@ -11,6 +11,8 @@ namespace Engine
     {
         std::vector<std::shared_ptr<Biome>> biomes;
         size_t seed;
+        int maxWorldHeight;
+        int minWorldHeight;
     };
 
     class WorldGenerator
