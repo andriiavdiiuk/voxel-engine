@@ -1,6 +1,6 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/hash.hpp>
-#include "Engine/Core/World/WorldGenerator.hpp"
+#include "Engine/Core/World/LevelGenerator.hpp"
 #include "Engine/Core/Resources/AssetHandle.hpp"
 #include "Engine/Common/Noises/PerlinNoise.hpp"
 #include "Engine/Core/Logger.hpp"
@@ -35,9 +35,9 @@ namespace Engine
 
   
 
-    WorldGenerator::WorldGenerator(const WorldGeneratorParams& params) : params(params) {}
+    LevelGenerator::LevelGenerator(const LevelGeneratorParams& params) : params(params) {}
 
-    void WorldGenerator::generate(glm::ivec3 position, Chunk& chunk)
+    void LevelGenerator::generate(glm::ivec3 position, Chunk& chunk)
     {
         if (position.y < params.minWorldHeight / CHUNK_SIZE || position.y > params.maxWorldHeight / CHUNK_SIZE)
         {

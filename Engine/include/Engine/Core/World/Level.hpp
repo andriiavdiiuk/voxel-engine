@@ -7,8 +7,9 @@
 #include "Engine/Core/Graphics/Meshing/ChunkMesh.hpp"
 namespace Engine
 {
-    struct World
+    class Level
     {
+    public: 
         std::unordered_map<glm::ivec3, Chunk> chunks;
         std::unordered_map<glm::ivec3, ChunkMesh> chunkMeshes;
     };

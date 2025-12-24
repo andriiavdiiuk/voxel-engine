@@ -8,6 +8,7 @@
 #include "Engine/Core/Resources/VoxelResource.hpp"
 #include "Engine/Core/Resources/AssetStorage.hpp"
 #include "Engine/Core/World/WorldDefinitions.hpp"
+#include "Engine/Core/World/Level.hpp"
 namespace Game
 {
     class GameApplication : public Engine::Application
@@ -20,8 +21,9 @@ namespace Game
 
     private:
         bool isRunning;
+        bool enableDebug;
         Engine::CameraController player;
-        Engine::World world;
+        Engine::Level world;
         std::shared_ptr<Engine::AssetStorage<Engine::TextureArray>> textureArrayStorage;
         std::shared_ptr<Engine::AssetStorage<Engine::Shader>> shaderStorage;
         std::shared_ptr<Engine::AssetStorage<Engine::VoxelResource>> voxelStorage;

@@ -20,12 +20,12 @@ namespace Engine
         chunkMesh.unbindVao();
     }
     
-    void renderWorld(const Shader& shader, const World& world, const Camera& camera, const TextureArray& textureArray)
+    void renderLevel(const Shader& shader, const Level& level, const Camera& camera, const TextureArray& textureArray)
     {
-        for (auto& [pos, chunk] : world.chunks)
+        for (auto& [pos, chunk] : level.chunks)
         {
-            auto it = world.chunkMeshes.find(pos);
-            if (it != world.chunkMeshes.end())
+            auto it = level.chunkMeshes.find(pos);
+            if (it != level.chunkMeshes.end())
             {
                 const ChunkMesh& mesh = it->second;
                 

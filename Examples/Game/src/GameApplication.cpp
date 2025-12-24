@@ -6,16 +6,17 @@
 #include <random>
 #include <memory>
 #include "Engine/Core/Resources/DefaultAssets.hpp"
-#include "Engine/Core/World/WorldGenerator.hpp"
+#include "Engine/Core/World/LevelGenerator.hpp"
 #include <vector>
 #include <string>
 #include <iostream>
-
+#include <Engine/Core/UI/ImGui/ImGuiDebugLayer.hpp>
 namespace Game
 {
     GameApplication::GameApplication() :
         Application(),
-        player(Engine::CameraController(input))
+        player(Engine::CameraController(input, window)),
+        enableDebug(false)
     {
         shaderStorage = std::make_shared<Engine::AssetStorage<Engine::Shader>>(
             *Engine::loadRegistry(std::string{ Engine::DefaultShaderRegistryPath }),
@@ -46,22 +47,27 @@ namespace Game
         std::mt19937_64 gen(rd());         
         std::uniform_int_distribution<size_t> dist(0, ~size_t(0));
 
-        Engine::WorldGeneratorParams params;
+        Engine::LevelGeneratorParams params;
         params.seed = dist(gen);
         params.biomes = std::vector{ biomeStorage->getAsset("plains") };
-        Engine::WorldGenerator generator = Engine::WorldGenerator(params);
+        params.maxWorldHeight = 64;
+        params.minWorldHeight = 0;
+        Engine::LevelGenerator generator = Engine::LevelGenerator(params);
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
-            for (int j = 0; j < 5; j++)
+            for (int j = 0; j < 4; j++)
             {
-                glm::ivec3 chunkPos(i, 0, j);
-                Engine::Chunk& chunk = world.chunks.try_emplace(chunkPos, chunkPos).first->second;
-                generator.generate(chunkPos, chunk);
+                for (int k = 0; k < 10; k++)
+                {
+                    glm::ivec3 chunkPos(i, j, k);
+                    Engine::Chunk& chunk = world.chunks.try_emplace(chunkPos, chunkPos).first->second;
+                    generator.generate(chunkPos, chunk);
 
 
-                Engine::ChunkMesh& mesh = world.chunkMeshes.try_emplace(chunk.getChunkPosition()).first->second;
-                mesh.generateFromChunk(chunk, voxelStorage, textureArrayStorage);
+                    Engine::ChunkMesh& mesh = world.chunkMeshes.try_emplace(chunk.getChunkPosition()).first->second;
+                    mesh.generateFromChunk(chunk, voxelStorage, textureArrayStorage);
+                }
             }
         }
     }
@@ -75,15 +81,24 @@ namespace Game
 
     void GameApplication::update(double deltaTime)
     {
+        if (input->getKeyboard().isKeyPressed(Engine::Key::GraveAccent))
+        {
+            enableDebug = !enableDebug;
+        }
+
+        Engine::CameraDebug(enableDebug, player.getCamera());
+
+
         player.update(deltaTime);
+        
     }
 
     void GameApplication::render(double deltaTime)
     {
-        Engine::renderWorld(
+        Engine::renderLevel(
             *shaderStorage->getAsset("voxel_shader"), 
             world,
-            player.camera, 
+            player.getCamera(),
             *textureArrayStorage->getAsset("textures"));
     }
 }

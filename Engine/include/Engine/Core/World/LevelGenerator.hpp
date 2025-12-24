@@ -7,7 +7,7 @@ namespace Engine
 {
     struct Biome;
 
-    struct WorldGeneratorParams
+    struct LevelGeneratorParams
     {
         std::vector<std::shared_ptr<Biome>> biomes;
         size_t seed;
@@ -15,15 +15,15 @@ namespace Engine
         int minWorldHeight;
     };
 
-    class WorldGenerator
+    class LevelGenerator
     {
     public:
-        WorldGenerator(const WorldGeneratorParams& params);
-        ~WorldGenerator() = default;
+        LevelGenerator(const LevelGeneratorParams& params);
+        ~LevelGenerator() = default;
         void generate(glm::ivec3 position, Chunk& chunk);
 
     private:
-        const WorldGeneratorParams params;
+        const LevelGeneratorParams params;
 
     };
 }

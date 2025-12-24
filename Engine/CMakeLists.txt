@@ -21,8 +21,8 @@ set(ENGINE_HEADERS
 
     "include/Engine/Core/World/Chunk.hpp"
     "include/Engine/Core/World/VoxelStorage.hpp"
-    "include/Engine/Core/World/World.hpp"
-    "include/Engine/Core/World/WorldGenerator.hpp"
+    "include/Engine/Core/World/Level.hpp"
+    "include/Engine/Core/World/LevelGenerator.hpp"
     "include/Engine/Core/World/WorldDefinitions.hpp"
 
     "include/Engine/Core/Components/Transform.hpp"
@@ -75,7 +75,7 @@ set(ENGINE_SOURCES
 
     "src/Core/World/Chunk.cpp"
     "src/Core/World/VoxelStorage.cpp"
-    "src/Core/World/WorldGenerator.cpp"
+    "src/Core/World/LevelGenerator.cpp"
 
     "src/Core/Input/Input.cpp"
     "src/Core/Input/Mouse.cpp"
@@ -98,8 +98,7 @@ set(ENGINE_SOURCES
 
 add_library(${PROJECT_NAME}
     ${ENGINE_HEADERS}
-    ${ENGINE_SOURCES}
-)
+    ${ENGINE_SOURCES})
 # ===== Output Properties =====
 set_target_properties(${PROJECT_NAME} PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}"
