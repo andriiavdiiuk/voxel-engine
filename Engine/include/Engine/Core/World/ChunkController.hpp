@@ -1,29 +1,40 @@
 #pragma once
 #include <memory>
 #include <glm/glm.hpp>
+#include "Level.hpp"
 namespace Engine
 {
-    class Level;
+    //class Level;
     class LevelGenerator;
+
+    template<typename T>
+    class AssetStorage;
+    struct VoxelResource;
+    class TextureArray;
 
     struct ChunkControllerParams
     {
         int loadingDistance;
+        int meshingDistance;
     };
 
     class ChunkController
     {
     public:
-        ChunkController(std::shared_ptr<Level> level, std::unique_ptr<LevelGenerator> levelGenerator);
+        ChunkController(ChunkControllerParams params, std::unique_ptr<LevelGenerator> levelGenerator, 
+            std::shared_ptr<AssetStorage<VoxelResource>> voxelStorage, std::shared_ptr<AssetStorage<TextureArray>> textureArrayStorage);
+
         ~ChunkController() = default;
 
-        void loadChunk(glm::ivec3 position);
-        void unloadChunk(glm::ivec3 position);
-
-        void update();
+        void update(Level& level, glm::ivec3 chunkPosition) const;
 
     private:
-        std::shared_ptr<Level> level;
+        ChunkControllerParams params;
         std::unique_ptr<LevelGenerator> levelGenerator;
+        std::shared_ptr<AssetStorage<VoxelResource>> voxelStorage;
+        std::shared_ptr<AssetStorage<TextureArray>> textureArrayStorage;
+
+        void createChunk(Level& level, glm::ivec3 chunkPosition) const;
+        void createChunkMesh(Level& level, glm::ivec3 chunkPosition) const;
     };
 }

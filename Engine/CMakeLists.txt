@@ -24,6 +24,7 @@ set(ENGINE_HEADERS
     "include/Engine/Core/World/Level.hpp"
     "include/Engine/Core/World/LevelGenerator.hpp"
     "include/Engine/Core/World/WorldDefinitions.hpp"
+    "include/Engine/Core/World/ChunkController.hpp"
 
     "include/Engine/Core/Components/Transform.hpp"
 
@@ -76,6 +77,7 @@ set(ENGINE_SOURCES
     "src/Core/World/Chunk.cpp"
     "src/Core/World/VoxelStorage.cpp"
     "src/Core/World/LevelGenerator.cpp"
+    "src/Core/World/ChunkController.cpp"
 
     "src/Core/Input/Input.cpp"
     "src/Core/Input/Mouse.cpp"
