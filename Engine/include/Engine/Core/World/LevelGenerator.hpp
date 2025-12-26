@@ -20,7 +20,7 @@ namespace Engine
     public:
         LevelGenerator(const LevelGeneratorParams& params);
         ~LevelGenerator() = default;
-        void generate(glm::ivec3 position, Chunk& chunk);
+        void generate(glm::ivec3 position, Chunk& chunk) const;
 
     private:
         const LevelGeneratorParams params;

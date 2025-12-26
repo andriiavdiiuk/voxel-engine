@@ -37,7 +37,7 @@ namespace Engine
 
     LevelGenerator::LevelGenerator(const LevelGeneratorParams& params) : params(params) {}
 
-    void LevelGenerator::generate(glm::ivec3 position, Chunk& chunk)
+    void LevelGenerator::generate(glm::ivec3 position, Chunk& chunk) const
     {
         if (position.y < params.minWorldHeight / CHUNK_SIZE || position.y > params.maxWorldHeight / CHUNK_SIZE)
         {
@@ -49,7 +49,8 @@ namespace Engine
             );
 
             LOG_ERROR(msg);
-            throw std::out_of_range(msg);
+            //throw std::out_of_range(msg);
+            return;
         }
 
 
